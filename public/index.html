@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alertas em Tempo Real</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f4; padding: 20px; }
+        h1 { text-align: center; color: #333; }
+        #alertsContainer { max-width: 800px; margin: 0 auto; }
+        .alert-card {
+            background-color: white;
+            color: #d83b01;
+            border-left: 5px solid #d83b01;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+        }
+        .alert-card p { margin: 0; }
+        .alert-card small { color: #888; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <h1>Últimos Alertas</h1>
+    <div id="alertsContainer">
+        </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+    <script>
+        // COLE SUA CONFIGURAÇÃO DO FIREBASE AQUI (A MESMA DO ADMIN)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDWQydohtIvlVZq0sNoXgNEhob8D4TwZBA",
+            authDomain: "alien-terminal.firebaseapp.com",
+            projectId: "alien-terminal",
+            storageBucket: "alien-terminal.firebasestorage.app",
+            messagingSenderId: "484368179427",
+            appId: "1:484368179427:web:f19d379b634d0bcd7025d6",
+            measurementId: "G-XHLNKZC48J",
+            };
+
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Referência para o banco de dados
+        const database = firebase.database();
+        const alertsRef = database.ref('alertas');
+        const alertsContainer = document.getElementById('alertsContainer');
+
+        // Ouve por novos "filhos" (alertas) adicionados em 'alertas'
+        alertsRef.on('child_added', (snapshot) => {
+            const newAlert = snapshot.val(); // Pega os dados do alerta (ex: {texto: "...", timestamp: ...})
+            
+            // Cria os elementos HTML para exibir o alerta
+            const alertCard = document.createElement('div');
+            alertCard.className = 'alert-card';
+
+            const messageP = document.createElement('p');
+            messageP.textContent = newAlert.texto;
+
+            const timeSmall = document.createElement('small');
+            timeSmall.textContent = `Recebido em: ${new Date(newAlert.timestamp).toLocaleString('pt-BR')}`;
+
+            alertCard.appendChild(messageP);
+            alertCard.appendChild(timeSmall);
+
+            // Adiciona o novo alerta no topo da lista
+            alertsContainer.prepend(alertCard);
+        });
+    </script>
+</body>
+</html>

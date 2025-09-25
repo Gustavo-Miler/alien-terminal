@@ -1,0 +1,203 @@
+[debug] [2025-09-25T15:52:42.209Z] ----------------------------------------------------------------------
+[debug] [2025-09-25T15:52:42.219Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js login
+[debug] [2025-09-25T15:52:42.219Z] CLI Version:   14.17.0
+[debug] [2025-09-25T15:52:42.219Z] Platform:      win32
+[debug] [2025-09-25T15:52:42.219Z] Node Version:  v22.19.0
+[debug] [2025-09-25T15:52:42.220Z] Time:          Thu Sep 25 2025 12:52:42 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2025-09-25T15:52:42.220Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-09-25T15:52:42.224Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] i  The Firebase CLI’s MCP server feature can optionally make use of Gemini in Firebase. Learn more about Gemini in Firebase and how it uses your data: https://firebase.google.com/docs/gemini-in-firebase#how-gemini-in-firebase-uses-your-data 
+[info] 
+[info] i  Firebase optionally collects CLI and Emulator Suite usage and error reporting information to help improve our products. Data is collected in accordance with Google's privacy policy (https://policies.google.com/privacy) and is not used to identify you. 
+[info] 
+[info] i  To change your preferences at any time, run `firebase logout` and `firebase login` again. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=98665848&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+[info] 
+[info] Waiting for authentication...
+[debug] [2025-09-25T15:53:04.240Z] *** [apiv2] error from fetch(https://firebase-public.firebaseio.com/cli.json, {"headers":{},"method":"GET"}): FetchError: request to https://firebase-public.firebaseio.com/cli.json failed, reason: 
+[warn] !  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection. 
+[debug] [2025-09-25T15:53:04.241Z] Failed to fetch MOTD FirebaseError: Failed to make request to https://firebase-public.firebaseio.com/cli.json
+[debug] [2025-09-25T15:53:06.829Z] >>> [apiv2][query] POST https://accounts.google.com/o/oauth2/token [none]
+[debug] [2025-09-25T15:53:06.829Z] >>> [apiv2][body] POST https://accounts.google.com/o/oauth2/token [omitted]
+[debug] [2025-09-25T15:53:27.880Z] *** [apiv2] error from fetch(https://accounts.google.com/o/oauth2/token, {"headers":{},"method":"POST","body":{"_overheadLength":543,"_valueLength":208,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------34f9ce5880ca05c652efd5cf","_events":{},"_eventsCount":1}}): FetchError: request to https://accounts.google.com/o/oauth2/token failed, reason: connect ETIMEDOUT 64.233.190.84:443
+[debug] [2025-09-25T15:53:27.880Z] Token Fetch Error: FirebaseError: Failed to make request to https://accounts.google.com/o/oauth2/token
+    at RetryOperation._fn (C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:261:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-09-25T15:53:27.893Z] >>> [apiv2][query] POST https://auth.firebase.tools/attest [none]
+[debug] [2025-09-25T15:53:27.893Z] >>> [apiv2][body] POST https://auth.firebase.tools/attest {"session_id":"d7e91041-713a-4206-bbe3-b803cbf34ba7"}
+[debug] [2025-09-25T15:53:49.801Z] *** [apiv2] error from fetch(https://auth.firebase.tools/attest, {"headers":{},"method":"POST","body":"{\"session_id\":\"d7e91041-713a-4206-bbe3-b803cbf34ba7\"}"}): FetchError: request to https://auth.firebase.tools/attest failed, reason: 
+[debug] [2025-09-25T15:54:09.984Z] ----------------------------------------------------------------------
+[debug] [2025-09-25T15:54:09.991Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js login --reauth
+[debug] [2025-09-25T15:54:09.991Z] CLI Version:   14.17.0
+[debug] [2025-09-25T15:54:09.991Z] Platform:      win32
+[debug] [2025-09-25T15:54:09.991Z] Node Version:  v22.19.0
+[debug] [2025-09-25T15:54:09.992Z] Time:          Thu Sep 25 2025 12:54:09 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2025-09-25T15:54:09.992Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-09-25T15:54:09.996Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=528593668&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+[info] 
+[info] Waiting for authentication...
+[debug] [2025-09-25T15:54:20.092Z] >>> [apiv2][query] POST https://accounts.google.com/o/oauth2/token [none]
+[debug] [2025-09-25T15:54:20.092Z] >>> [apiv2][body] POST https://accounts.google.com/o/oauth2/token [omitted]
+[debug] [2025-09-25T15:54:31.897Z] *** [apiv2] error from fetch(https://firebase-public.firebaseio.com/cli.json, {"headers":{},"method":"GET"}): FetchError: request to https://firebase-public.firebaseio.com/cli.json failed, reason: 
+[warn] !  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection. 
+[debug] [2025-09-25T15:54:31.898Z] Failed to fetch MOTD FirebaseError: Failed to make request to https://firebase-public.firebaseio.com/cli.json
+[debug] [2025-09-25T15:54:41.136Z] *** [apiv2] error from fetch(https://accounts.google.com/o/oauth2/token, {"headers":{},"method":"POST","body":{"_overheadLength":543,"_valueLength":208,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------f591b09d59b9536a4f673e27","_events":{},"_eventsCount":1}}): FetchError: request to https://accounts.google.com/o/oauth2/token failed, reason: connect ETIMEDOUT 64.233.190.84:443
+[debug] [2025-09-25T15:54:41.137Z] Token Fetch Error: FirebaseError: Failed to make request to https://accounts.google.com/o/oauth2/token
+    at RetryOperation._fn (C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:261:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-09-25T15:54:41.142Z] >>> [apiv2][query] POST https://auth.firebase.tools/attest [none]
+[debug] [2025-09-25T15:54:41.143Z] >>> [apiv2][body] POST https://auth.firebase.tools/attest {"session_id":"2d0e2952-0551-442e-b3c6-166fa67d6cc1"}
+[debug] [2025-09-25T15:55:02.982Z] *** [apiv2] error from fetch(https://auth.firebase.tools/attest, {"headers":{},"method":"POST","body":"{\"session_id\":\"2d0e2952-0551-442e-b3c6-166fa67d6cc1\"}"}): FetchError: request to https://auth.firebase.tools/attest failed, reason: 
+[debug] [2025-09-25T15:55:08.002Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:275:49)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2025-09-25T15:56:06.016Z] ----------------------------------------------------------------------
+[debug] [2025-09-25T15:56:06.023Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js login --no-localhost
+[debug] [2025-09-25T15:56:06.023Z] CLI Version:   14.17.0
+[debug] [2025-09-25T15:56:06.023Z] Platform:      win32
+[debug] [2025-09-25T15:56:06.024Z] Node Version:  v22.19.0
+[debug] [2025-09-25T15:56:06.024Z] Time:          Thu Sep 25 2025 12:56:06 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2025-09-25T15:56:06.024Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-09-25T15:56:06.029Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] i  The Firebase CLI’s MCP server feature can optionally make use of Gemini in Firebase. Learn more about Gemini in Firebase and how it uses your data: https://firebase.google.com/docs/gemini-in-firebase#how-gemini-in-firebase-uses-your-data 
+[info] 
+[info] i  Firebase optionally collects CLI and Emulator Suite usage and error reporting information to help improve our products. Data is collected in accordance with Google's privacy policy (https://policies.google.com/privacy) and is not used to identify you. 
+[info] 
+[info] i  To change your preferences at any time, run `firebase logout` and `firebase login` again. 
+[debug] [2025-09-25T15:56:10.191Z] >>> [apiv2][query] POST https://auth.firebase.tools/attest [none]
+[debug] [2025-09-25T15:56:10.191Z] >>> [apiv2][body] POST https://auth.firebase.tools/attest {"session_id":"7efadc75-d06b-4186-af8d-effd7843f3bc"}
+[debug] [2025-09-25T15:56:27.951Z] *** [apiv2] error from fetch(https://firebase-public.firebaseio.com/cli.json, {"headers":{},"method":"GET"}): FetchError: request to https://firebase-public.firebaseio.com/cli.json failed, reason: 
+[warn] !  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection. 
+[debug] [2025-09-25T15:56:27.952Z] Failed to fetch MOTD FirebaseError: Failed to make request to https://firebase-public.firebaseio.com/cli.json
+[debug] [2025-09-25T15:56:32.019Z] *** [apiv2] error from fetch(https://auth.firebase.tools/attest, {"headers":{},"method":"POST","body":"{\"session_id\":\"7efadc75-d06b-4186-af8d-effd7843f3bc\"}"}): FetchError: request to https://auth.firebase.tools/attest failed, reason: 
+[debug] [2025-09-25T15:56:37.039Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:275:49)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2025-09-25T16:01:24.191Z] ----------------------------------------------------------------------
+[debug] [2025-09-25T16:01:24.199Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js login
+[debug] [2025-09-25T16:01:24.200Z] CLI Version:   14.17.0
+[debug] [2025-09-25T16:01:24.200Z] Platform:      win32
+[debug] [2025-09-25T16:01:24.200Z] Node Version:  v22.19.0
+[debug] [2025-09-25T16:01:24.200Z] Time:          Thu Sep 25 2025 13:01:24 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2025-09-25T16:01:24.200Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-09-25T16:01:24.205Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] i  The Firebase CLI’s MCP server feature can optionally make use of Gemini in Firebase. Learn more about Gemini in Firebase and how it uses your data: https://firebase.google.com/docs/gemini-in-firebase#how-gemini-in-firebase-uses-your-data 
+[info] 
+[info] i  Firebase optionally collects CLI and Emulator Suite usage and error reporting information to help improve our products. Data is collected in accordance with Google's privacy policy (https://policies.google.com/privacy) and is not used to identify you. 
+[info] 
+[info] i  To change your preferences at any time, run `firebase logout` and `firebase login` again. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=580472684&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+[info] 
+[info] Waiting for authentication...
+[debug] [2025-09-25T16:01:36.432Z] >>> [apiv2][query] POST https://accounts.google.com/o/oauth2/token [none]
+[debug] [2025-09-25T16:01:36.432Z] >>> [apiv2][body] POST https://accounts.google.com/o/oauth2/token [omitted]
+[debug] [2025-09-25T16:01:46.202Z] *** [apiv2] error from fetch(https://firebase-public.firebaseio.com/cli.json, {"headers":{},"method":"GET"}): FetchError: request to https://firebase-public.firebaseio.com/cli.json failed, reason: 
+[warn] !  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection. 
+[debug] [2025-09-25T16:01:46.203Z] Failed to fetch MOTD FirebaseError: Failed to make request to https://firebase-public.firebaseio.com/cli.json
+[debug] [2025-09-25T16:01:57.458Z] *** [apiv2] error from fetch(https://accounts.google.com/o/oauth2/token, {"headers":{},"method":"POST","body":{"_overheadLength":543,"_valueLength":208,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------0d3f0081ac467398f4bd4ea7","_events":{},"_eventsCount":1}}): FetchError: request to https://accounts.google.com/o/oauth2/token failed, reason: connect ETIMEDOUT 142.251.15.84:443
+[debug] [2025-09-25T16:01:57.458Z] Token Fetch Error: FirebaseError: Failed to make request to https://accounts.google.com/o/oauth2/token
+    at RetryOperation._fn (C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:261:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-09-25T16:01:57.464Z] >>> [apiv2][query] POST https://auth.firebase.tools/attest [none]
+[debug] [2025-09-25T16:01:57.464Z] >>> [apiv2][body] POST https://auth.firebase.tools/attest {"session_id":"5e643448-6c79-472e-84fe-1f94f9372a15"}
+[debug] [2025-09-25T16:02:19.283Z] *** [apiv2] error from fetch(https://auth.firebase.tools/attest, {"headers":{},"method":"POST","body":"{\"session_id\":\"5e643448-6c79-472e-84fe-1f94f9372a15\"}"}): FetchError: request to https://auth.firebase.tools/attest failed, reason: 
+[debug] [2025-09-25T16:02:24.303Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:275:49)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2025-09-25T16:02:52.253Z] ----------------------------------------------------------------------
+[debug] [2025-09-25T16:02:52.260Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js login --reauth
+[debug] [2025-09-25T16:02:52.260Z] CLI Version:   14.17.0
+[debug] [2025-09-25T16:02:52.261Z] Platform:      win32
+[debug] [2025-09-25T16:02:52.261Z] Node Version:  v22.19.0
+[debug] [2025-09-25T16:02:52.261Z] Time:          Thu Sep 25 2025 13:02:52 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2025-09-25T16:02:52.261Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-09-25T16:02:52.265Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=141375360&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+[info] 
+[info] Waiting for authentication...
+[debug] [2025-09-25T16:03:04.655Z] >>> [apiv2][query] POST https://accounts.google.com/o/oauth2/token [none]
+[debug] [2025-09-25T16:03:04.655Z] >>> [apiv2][body] POST https://accounts.google.com/o/oauth2/token [omitted]
+[debug] [2025-09-25T16:03:14.168Z] *** [apiv2] error from fetch(https://firebase-public.firebaseio.com/cli.json, {"headers":{},"method":"GET"}): FetchError: request to https://firebase-public.firebaseio.com/cli.json failed, reason: 
+[warn] !  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection. 
+[debug] [2025-09-25T16:03:14.169Z] Failed to fetch MOTD FirebaseError: Failed to make request to https://firebase-public.firebaseio.com/cli.json
+[debug] [2025-09-25T16:03:25.698Z] *** [apiv2] error from fetch(https://accounts.google.com/o/oauth2/token, {"headers":{},"method":"POST","body":{"_overheadLength":543,"_valueLength":208,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------f3aa3324feea1b2e5e6608c9","_events":{},"_eventsCount":1}}): FetchError: request to https://accounts.google.com/o/oauth2/token failed, reason: connect ETIMEDOUT 142.251.15.84:443
+[debug] [2025-09-25T16:03:25.698Z] Token Fetch Error: FirebaseError: Failed to make request to https://accounts.google.com/o/oauth2/token
+    at RetryOperation._fn (C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:261:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-09-25T16:03:25.704Z] >>> [apiv2][query] POST https://auth.firebase.tools/attest [none]
+[debug] [2025-09-25T16:03:25.704Z] >>> [apiv2][body] POST https://auth.firebase.tools/attest {"session_id":"63950e00-2f8d-4aa1-865b-4415c775cc6a"}
+[debug] [2025-09-25T16:04:19.054Z] ----------------------------------------------------------------------
+[debug] [2025-09-25T16:04:19.062Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js login
+[debug] [2025-09-25T16:04:19.062Z] CLI Version:   14.17.0
+[debug] [2025-09-25T16:04:19.062Z] Platform:      win32
+[debug] [2025-09-25T16:04:19.062Z] Node Version:  v22.19.0
+[debug] [2025-09-25T16:04:19.063Z] Time:          Thu Sep 25 2025 13:04:19 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2025-09-25T16:04:19.063Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-09-25T16:04:19.067Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] i  The Firebase CLI’s MCP server feature can optionally make use of Gemini in Firebase. Learn more about Gemini in Firebase and how it uses your data: https://firebase.google.com/docs/gemini-in-firebase#how-gemini-in-firebase-uses-your-data 
+[debug] [2025-09-25T16:04:40.970Z] *** [apiv2] error from fetch(https://firebase-public.firebaseio.com/cli.json, {"headers":{},"method":"GET"}): FetchError: request to https://firebase-public.firebaseio.com/cli.json failed, reason: 
+[warn] !  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection. 
+[debug] [2025-09-25T16:04:40.971Z] Failed to fetch MOTD FirebaseError: Failed to make request to https://firebase-public.firebaseio.com/cli.json
+[info] 
+[info] i  Firebase optionally collects CLI and Emulator Suite usage and error reporting information to help improve our products. Data is collected in accordance with Google's privacy policy (https://policies.google.com/privacy) and is not used to identify you. 
+[info] 
+[info] i  To change your preferences at any time, run `firebase logout` and `firebase login` again. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=513584536&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+[info] 
+[info] Waiting for authentication...
+[debug] [2025-09-25T16:05:02.123Z] >>> [apiv2][query] POST https://accounts.google.com/o/oauth2/token [none]
+[debug] [2025-09-25T16:05:02.124Z] >>> [apiv2][body] POST https://accounts.google.com/o/oauth2/token [omitted]
+[debug] [2025-09-25T16:05:23.186Z] *** [apiv2] error from fetch(https://accounts.google.com/o/oauth2/token, {"headers":{},"method":"POST","body":{"_overheadLength":543,"_valueLength":208,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------9dd3e2179370db2660f5a3b8","_events":{},"_eventsCount":1}}): FetchError: request to https://accounts.google.com/o/oauth2/token failed, reason: connect ETIMEDOUT 142.251.15.84:443
+[debug] [2025-09-25T16:05:23.187Z] Token Fetch Error: FirebaseError: Failed to make request to https://accounts.google.com/o/oauth2/token
+    at RetryOperation._fn (C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:261:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2025-09-25T16:05:23.200Z] >>> [apiv2][query] POST https://auth.firebase.tools/attest [none]
+[debug] [2025-09-25T16:05:23.200Z] >>> [apiv2][body] POST https://auth.firebase.tools/attest {"session_id":"68d4a29e-b3f7-4e3e-bbbe-fbbe2013527a"}
+[debug] [2025-09-25T16:05:45.031Z] *** [apiv2] error from fetch(https://auth.firebase.tools/attest, {"headers":{},"method":"POST","body":"{\"session_id\":\"68d4a29e-b3f7-4e3e-bbbe-fbbe2013527a\"}"}): FetchError: request to https://auth.firebase.tools/attest failed, reason: 
+[debug] [2025-09-25T16:05:50.052Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\jnmarques\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:275:49)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+[error] 
+[error] Error: An unexpected error has occurred.

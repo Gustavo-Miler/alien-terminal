@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Enviar Alerta</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 400px; }
+        h1 { text-align: center; color: #333; }
+        form { display: flex; flex-direction: column; }
+        textarea { padding: 10px; font-size: 1rem; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 15px; resize: vertical; }
+        button { background-color: #007bff; color: white; border: none; padding: 12px; font-size: 1rem; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #0056b3; }
+        #status { text-align: center; margin-top: 15px; color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Painel do Administrador</h1>
+        <form id="alertForm">
+            <label for="alertMessage">Mensagem do Alerta:</label>
+            <textarea id="alertMessage" rows="4" required></textarea>
+            <button type="submit">Enviar Alerta</button>
+        </form>
+        <p id="status"></p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+    <script>
+        // COLE SUA CONFIGURAÇÃO DO FIREBASE AQUI
+        const firebaseConfig = {
+            apiKey: "AIzaSyDWQydohtIvlVZq0sNoXgNEhob8D4TwZBA",
+            authDomain: "alien-terminal.firebaseapp.com",
+            projectId: "alien-terminal",
+            storageBucket: "alien-terminal.firebasestorage.app",
+            messagingSenderId: "484368179427",
+            appId: "1:484368179427:web:f19d379b634d0bcd7025d6",
+            measurementId: "G-XHLNKZC48J",
+            };
+
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Referência para o nosso banco de dados
+        const database = firebase.database();
+
+        // Manipulação do formulário
+        const alertForm = document.getElementById('alertForm');
+        const alertMessage = document.getElementById('alertMessage');
+        const statusEl = document.getElementById('status');
+
+        alertForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Impede o recarregamento da página
+
+            const message = alertMessage.value;
+            if (!message) return;
+
+            // Cria uma nova "pasta" para o alerta com uma chave única
+            const newAlertRef = database.ref('alertas').push();
+            
+            newAlertRef.set({
+                texto: message,
+                timestamp: Date.now() // Guarda a data de envio
+            })
+            .then(() => {
+                statusEl.textContent = 'Alerta enviado com sucesso!';
+                alertMessage.value = ''; // Limpa o campo
+                setTimeout(() => statusEl.textContent = '', 3000); // Limpa a mensagem de status
+            })
+            .catch((error) => {
+                console.error("Erro ao enviar alerta: ", error);
+                statusEl.textContent = 'Falha ao enviar alerta.';
+                statusEl.style.color = 'red';
+            });
+        });
+    </script>
+</body>
+</html>
