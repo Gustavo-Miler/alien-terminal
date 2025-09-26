@@ -30,6 +30,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"></script>
 
     <script>
         // COLE SUA CONFIGURAÇÃO DO FIREBASE AQUI (A MESMA DO ADMIN)
@@ -71,6 +72,36 @@
             // Adiciona o novo alerta no topo da lista
             alertsContainer.prepend(alertCard);
         });
+
+        const messaging = firebase.messaging();
+
+        function requestNotificationPermission() {
+            console.log('Requesting permission...');
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                    
+                    // Obter o token do dispositivo
+                    messaging.getToken({ vapidKey: 'BFKJxZpQkQXxMs_e1tCAjgWuEMiC4xRCNUv620NMpZ8jtCoTkIyeRaxAwooSkOjnh-T-prUWQnF6vZSKSfUeLE8' })
+                        .then((currentToken) => {
+                            if (currentToken) {
+                                console.log('FCM Token:', currentToken);
+                                // Salvar o token no banco de dados para uso posterior
+                                firebase.database().ref('fcmTokens').push(currentToken);
+                            } else {
+                                console.log('No registration token available. Request permission to generate one.');
+                            }
+                        }).catch((err) => {
+                            console.log('An error occurred while retrieving token. ', err);
+                        });
+                } else {
+                    console.log('Unable to get permission to notify.');
+                }
+            });
+        }
+
+        // Chame a função para pedir permissão assim que a página carregar
+        requestNotificationPermission();
     </script>
 </body>
 </html>
