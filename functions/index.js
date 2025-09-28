@@ -1,33 +1,61 @@
-const functions = require("firebase-functions");
+// functions/index.js
+
+const { onValueCreated } = require("firebase-functions/v2/database");
 const admin = require("firebase-admin");
-admin.initializeApp();
+const functions = require("firebase-functions");
 
-// Esta função é acionada sempre que um novo alerta é criado no Realtime Database
-exports.sendPushNotification = functions.database.ref("/alertas/{pushId}")
-    .onCreate(async (snapshot, context) => {
-      // Pega o texto do alerta que foi criado
-      const alertData = snapshot.val();
-      const alertText = alertData.texto;
+// Carrega o arquivo da chave de conta de serviço para garantir a autenticação
+const serviceAccount = require("./service-account-key.json");
 
-      // Monta o payload da notificação
-      const payload = {
-        notification: {
-          title: "Novo Alerta!",
-          body: alertText,
-          // icon: "your-icon-url", // Opcional
-        },
-      };
+// Inicializa o Admin SDK com as credenciais explícitas e a databaseURL correta
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://alien-terminal-default-rtdb.firebaseio.com" // SEM a barra no final
+});
 
-      // Busca todos os tokens de notificação salvos no banco
-      const tokensSnapshot = await admin.database().ref("fcmTokens").get();
-      if (!tokensSnapshot.exists()) {
-        console.log("No tokens to send notification to.");
-        return;
-      }
+exports.sendPushNotification = onValueCreated("/alertas/{pushId}", async (event) => {
+  const alertData = event.data.val();
+  functions.logger.log("Função acionada pelo alerta:", alertData);
 
-      const tokens = Object.values(tokensSnapshot.val());
+  // Prepara a notificação
+  const payload = {
+    notification: {
+      title: "Novo Alerta!",
+      body: `Alerta recebido: ${alertData.texto}`,
+    },
+  };
 
-      // Envia a notificação para todos os tokens
-      console.log(`Sending notification to ${tokens.length} tokens.`);
-      await admin.messaging().sendToDevice(tokens, payload);
-    });
+  // Busca os tokens no banco de dados
+  const tokensSnapshot = await admin.database().ref("fcmTokens").get();
+  if (!tokensSnapshot.exists()) {
+    functions.logger.log("Nenhum token de notificação encontrado no banco.");
+    return null;
+  }
+  
+  const tokens = Object.values(tokensSnapshot.val());
+  if (tokens.length === 0) {
+    functions.logger.log("A lista de tokens está vazia.");
+    return null;
+  }
+
+  functions.logger.log(`Preparando para enviar notificação para ${tokens.length} token(s).`);
+
+  try {
+    // Usa o método moderno e correto: sendEachForMulticast
+    const multicastMessage = {
+      tokens: tokens,
+      notification: payload.notification,
+    };
+    
+    const response = await admin.messaging().sendEachForMulticast(multicastMessage);
+    
+    functions.logger.log("Mensagens enviadas com sucesso:", response.successCount);
+    if (response.failureCount > 0) {
+      functions.logger.error("Falha ao enviar para alguns dispositivos:", response.failureCount);
+    }
+  } catch (error) {
+    functions.logger.error("ERRO CRÍTICO ao chamar a API de envio do FCM:", error);
+  }
+  
+  return null;
+});

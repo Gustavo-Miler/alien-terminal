@@ -1,38 +1,31 @@
-// Importa e configura o SDK do Firebase
-importScripts(
-  "https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"
-);
-importScripts(
-  "https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"
-);
+// public/firebase-messaging-sw.js
 
-// Cole sua configuração do Firebase aqui (a mesma dos outros arquivos)
-const firebaseConfig = {
-  apiKey: "AIzaSyDWQydohtIvlVZq0sNoXgNEhob8D4TwZBA",
-  authDomain: "alien-terminal.firebaseapp.com",
-  projectId: "alien-terminal",
-  storageBucket: "alien-terminal.firebasestorage.app",
-  messagingSenderId: "484368179427",
-  appId: "1:484368179427:web:f19d379b634d0bcd7025d6",
-  measurementId: "G-XHLNKZC48J",
-};
+// Este listener (ouvinte) captura QUALQUER evento de push que o navegador recebe.
+self.addEventListener('push', function(event) {
+  console.log('[Service Worker] Push Recebido.');
 
-firebase.initializeApp(firebaseConfig);
-
-const messaging = firebase.messaging();
-
-// Opcional: manipular notificações em background
-messaging.onBackgroundMessage((payload) => {
-  console.log(
-    "[firebase-messaging-sw.js] Received background message ",
-    payload
-  );
-  // Customize notification here
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: "/firebase-logo.png", // Opcional: adicione um ícone na pasta public
+  // Define uma notificação padrão, caso a mensagem venha vazia (como a do botão de teste)
+  let notificationTitle = 'Nova Notificação';
+  let notificationOptions = {
+    body: 'Você tem uma nova mensagem!',
+    icon: '/favicon.ico' // Opcional: adicione um ícone na sua pasta public
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // Tenta extrair os dados da notificação real enviada pelo Firebase.
+  // Se a mensagem tiver dados (payload), usamos eles.
+  if (event.data) {
+    try {
+      const data = event.data.json();
+      console.log('[Service Worker] Dados da notificação:', data);
+      notificationTitle = data.notification.title;
+      notificationOptions.body = data.notification.body;
+      // Você pode adicionar mais opções aqui se as enviar no payload, ex: icon, image, etc.
+    } catch (e) {
+      console.error('Erro ao processar os dados do push:', e);
+    }
+  }
+
+  // Mostra a notificação.
+  // event.waitUntil garante que o service worker não "durma" antes da notificação ser exibida.
+  event.waitUntil(self.registration.showNotification(notificationTitle, notificationOptions));
 });
