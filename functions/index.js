@@ -32,7 +32,7 @@ exports.sendPushNotification = onValueCreated("/alertas/{pushId}", async (event)
     return null;
   }
   
-  const tokens = Object.values(tokensSnapshot.val());
+  const tokens = Object.keys(tokensSnapshot.val());
   if (tokens.length === 0) {
     functions.logger.log("A lista de tokens está vazia.");
     return null;

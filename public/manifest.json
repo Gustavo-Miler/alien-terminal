@@ -1,0 +1,36 @@
+{
+  "name": "Hallowink Alertas",
+  "short_name": "Alertas",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#2a2a2a",
+  "theme_color": "#33ff00",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "1290x2796",
+      "type": "image/png",
+      "label": "Receba alertas em tempo real no seu dispositivo"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1893x960",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Receba alertas em tempo real no seu dispositivo"
+    }
+  ]
+}
