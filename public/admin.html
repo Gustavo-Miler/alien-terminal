@@ -3,80 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Enviar Alerta</title>
-    <link rel="manifest" href="/manifest.json">
+    <title>Admin - Gerenciar Terminal</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 400px; }
-        h1 { text-align: center; color: #333; }
-        form { display: flex; flex-direction: column; }
-        textarea { padding: 10px; font-size: 1rem; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 15px; resize: vertical; }
-        button { background-color: #007bff; color: white; border: none; padding: 12px; font-size: 1rem; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
-        button:hover { background-color: #0056b3; }
-        #status { text-align: center; margin-top: 15px; color: green; font-weight: bold; }
+        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 900px; margin: 20px auto; }
+        h1, h2 { text-align: center; color: #333; }
+        
+        .admin-section { margin-bottom: 40px; }
+
+        /* Estilos das propostas */
+        #proposalsList { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .proposal-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; }
+        .proposal-card p { margin: 0 0 10px 0; word-break: break-word; }
+        .proposal-card .meta { font-size: 0.9em; color: #555; }
+        .proposal-card .actions { margin-top: auto; display: flex; gap: 10px; }
+        .proposal-card button { width: 100%; padding: 10px; font-size: 0.9rem; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-publish { background-color: #28a745; color: white; }
+        .btn-reject { background-color: #dc3545; color: white; }
+        .proposal-card img { max-width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; }
+        .palette { display: flex; gap: 10px; margin-top: 10px; }
+        .palette label { display: block; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid #ccc; }
+        .palette input[type="radio"] { display: none; }
+        .palette input[type="radio"]:checked + label { border-color: #007bff; }
+
+        /* Estilos dos alertas publicados */
+        #clearAllAlertsButton { background-color: #c82333; color: white; margin-top: 10px; }
+        #alertsList .alert-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 8px; }
+        #alertsList .alert-item p { margin: 0; flex-grow: 1; word-break: break-word; font-size: 0.9rem; }
+        #alertsList .alert-item button { font-size: 0.8rem; padding: 5px 10px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Painel do Administrador</h1>
-        <form id="alertForm">
-            <label for="alertMessage">Mensagem do Alerta:</label>
-            <textarea id="alertMessage" rows="4" required></textarea>
-            <button type="submit">Enviar Alerta</button>
-        </form>
-        <p id="status"></p>
+    <div id="adminPanel" class="container" style="display: none;">
+        <h1>Painel de Administração</h1>
+
+        <div class="admin-section">
+            <h2>Propostas Pendentes</h2>
+            <div id="proposalsList"></div>
+        </div>
+
+        <div class="admin-section">
+            <h2>Alertas Publicados no Terminal</h2>
+            <div id="alertsList"></div>
+            <button id="clearAllAlertsButton">Limpar Todos os Alertas Publicados</button>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-
     <script>
-        // COLE SUA CONFIGURAÇÃO DO FIREBASE AQUI
-        const firebaseConfig = {
-            apiKey: "AIzaSyDWQydohtIvlVZq0sNoXgNEhob8D4TwZBA",
-            authDomain: "alien-terminal.firebaseapp.com",
-            projectId: "alien-terminal",
-            storageBucket: "alien-terminal.firebasestorage.app",
-            messagingSenderId: "484368179427",
-            appId: "1:484368179427:web:f19d379b634d0bcd7025d6",
-            measurementId: "G-XHLNKZC48J",
+        function checkAuth() {
+            const secretKey = "farofadototy"; // <-- TROQUE PELA SUA SENHA!
+            if (prompt("Chave de acesso:") === secretKey) {
+                document.getElementById('adminPanel').style.display = 'block';
+                initializeFirebase();
+            } else {
+                alert("Acesso Negado");
+                document.body.innerHTML = '';
+            }
+        }
+        checkAuth();
+
+        function initializeFirebase() {
+            const firebaseConfig = {
+                apiKey: "AIzaSyDWQydohtIvlVZq0sNoXgNEhob8D4TwZBA",
+                authDomain: "alien-terminal.firebaseapp.com",
+                projectId: "alien-terminal",
+                storageBucket: "alien-terminal.firebasestorage.app", // A sua config correta
+                messagingSenderId: "484368179427",
+                appId: "1:484368179427:web:f19d379b634d0bcd7025d6",
+                measurementId: "G-XHLNKZC48J",
             };
-
-        // Inicializa o Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        // Referência para o nosso banco de dados
-        const database = firebase.database();
-
-        // Manipulação do formulário
-        const alertForm = document.getElementById('alertForm');
-        const alertMessage = document.getElementById('alertMessage');
-        const statusEl = document.getElementById('status');
-
-        alertForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Impede o recarregamento da página
-
-            const message = alertMessage.value;
-            if (!message) return;
-
-            // Cria uma nova "pasta" para o alerta com uma chave única
-            const newAlertRef = database.ref('alertas').push();
+            firebase.initializeApp(firebaseConfig);
             
-            newAlertRef.set({
-                texto: message,
-                timestamp: Date.now() // Guarda a data de envio
-            })
-            .then(() => {
-                statusEl.textContent = 'Alerta enviado com sucesso!';
-                alertMessage.value = ''; // Limpa o campo
-                setTimeout(() => statusEl.textContent = '', 3000); // Limpa a mensagem de status
-            })
-            .catch((error) => {
-                console.error("Erro ao enviar alerta: ", error);
-                statusEl.textContent = 'Falha ao enviar alerta.';
-                statusEl.style.color = 'red';
+            const database = firebase.database();
+            const proposalsRef = database.ref('propostas');
+            const alertsRef = database.ref('alertas'); // Referência para os alertas publicados
+
+            // --- Lógica para MODERAR PROPOSTAS (sem alterações) ---
+            const proposalsList = document.getElementById('proposalsList');
+            proposalsRef.on('value', (snapshot) => {
+                proposalsList.innerHTML = !snapshot.exists() ? '<p>Nenhuma proposta pendente.</p>' : '';
+                snapshot.forEach(childSnapshot => {
+                    const key = childSnapshot.key; const proposal = childSnapshot.val();
+                    const card = document.createElement('div'); card.className = 'proposal-card';
+                    const imageHTML = proposal.imagemURL ? `<img src="${proposal.imagemURL}" alt="Imagem">` : '';
+                    card.innerHTML = `${imageHTML}<p><strong>Mensagem:</strong> ${proposal.mensagem}</p><p class="meta"><strong>De:</strong> ${proposal.nome}</p><div class="palette" data-key="${key}"><input type="radio" id="c1_${key}" name="cor_${key}" value="#0f0" checked><label for="c1_${key}" style="background:#0f0;"></label><input type="radio" id="c2_${key}" name="cor_${key}" value="#0ff"><label for="c2_${key}" style="background:#0ff;"></label><input type="radio" id="c3_${key}" name="cor_${key}" value="#f0f"><label for="c3_${key}" style="background:#f0f;"></label><input type="radio" id="c4_${key}" name="cor_${key}" value="#ff0"><label for="c4_${key}" style="background:#ff0;"></label></div><div class="actions"><button class="btn-publish" data-key="${key}">Publicar</button><button class="btn-reject" data-key="${key}">Recusar</button></div>`;
+                    const originalColorRadio = card.querySelector(`input[value="${proposal.cor}"]`);
+                    if (originalColorRadio) originalColorRadio.checked = true;
+                    proposalsList.prepend(card);
+                });
             });
-        });
+
+            proposalsList.addEventListener('click', (e) => {
+                const key = e.target.dataset.key; if (!key) return;
+                if (e.target.classList.contains('btn-reject')) { proposalsRef.child(key).remove(); } 
+                else if (e.target.classList.contains('btn-publish')) {
+                    const selectedColor = document.querySelector(`input[name="cor_${key}"]:checked`).value;
+                    proposalsRef.child(key).once('value', (snapshot) => {
+                        const proposalData = snapshot.val();
+                        const newAlert = { ...proposalData, texto: `${proposalData.nome}: ${proposalData.mensagem}`, cor: selectedColor, timestamp: Date.now() };
+                        alertsRef.push().set(newAlert).then(() => proposalsRef.child(key).remove());
+                    });
+                }
+            });
+
+            // --- NOVA LÓGICA: GERENCIAR ALERTAS PUBLICADOS ---
+            const alertsList = document.getElementById('alertsList');
+            const clearAllAlertsButton = document.getElementById('clearAllAlertsButton');
+
+            // Lista os alertas já publicados
+            alertsRef.on('value', (snapshot) => {
+                alertsList.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach(childSnapshot => {
+                        const key = childSnapshot.key;
+                        const alertData = childSnapshot.val();
+                        const item = document.createElement('div');
+                        item.className = 'alert-item';
+                        item.innerHTML = `<p style="color:${alertData.cor};">${alertData.texto}</p><button data-key="${key}">Apagar</button>`;
+                        alertsList.prepend(item);
+                    });
+                } else {
+                    alertsList.innerHTML = '<p style="text-align:center; color:#888;">Nenhum alerta publicado.</p>';
+                }
+            });
+
+            // Adiciona funcionalidade de apagar um alerta individual
+            alertsList.addEventListener('click', (e) => {
+                if (e.target.dataset.key) {
+                    alertsRef.child(e.target.dataset.key).remove();
+                }
+            });
+
+            // Adiciona funcionalidade de apagar todos os alertas
+            clearAllAlertsButton.addEventListener('click', () => {
+                if (confirm('Você tem CERTEZA que deseja apagar TODOS os alertas publicados?')) {
+                    alertsRef.remove();
+                }
+            });
+        }
     </script>
 </body>
 </html>

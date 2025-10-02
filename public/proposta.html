@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Proposta</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 500px; margin: 20px auto; }
+        h1 { text-align: center; color: #333; }
+        form { display: flex; flex-direction: column; gap: 15px; }
+        input, textarea, button { padding: 12px; font-size: 1rem; border-radius: 4px; border: 1px solid #ccc; }
+        textarea { resize: vertical; }
+        button { background-color: #28a745; color: white; border: none; cursor: pointer; }
+        button:disabled { background-color: #ccc; }
+        .palette { display: flex; gap: 10px; justify-content: center; }
+        .palette label { display: block; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+        .palette input[type="radio"] { display: none; }
+        .palette input[type="radio"]:checked + label { border-color: #007bff; }
+        #status { text-align: center; margin-top: 15px; font-weight: bold; color: green; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enviar Mensagem para o Terminal</h1>
+        <form id="proposalForm">
+            <input type="text" id="nome" placeholder="Seu nome" required maxlength="20">
+            <textarea id="mensagem" placeholder="Sua mensagem" required rows="4"></textarea>
+            <div>
+                <p style="text-align:center; margin-bottom: 10px;">Escolha uma cor:</p>
+                <div class="palette">
+                    <input type="radio" id="c2" name="cor" value="#0ff" checked><label for="c2" style="background:#0ff;"></label>
+                    <input type="radio" id="c3" name="cor" value="#f0f"><label for="c3" style="background:#f0f;"></label>
+                    <input type="radio" id="c4" name="cor" value="#ff0"><label for="c4" style="background:#ff0;"></label>
+                </div>
+            </div>
+            <label for="imagem">Imagem (opcional, .png ou .jpg):</label>
+            <input type="file" id="imagem" accept="image/png, image/jpeg">
+            <button type="submit">Enviar Proposta</button>
+        </form>
+        <p id="status"></p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+    <script>
+        // CORREÇÃO: Usando a sua config original, que estava correta.
+        const firebaseConfig = {
+            apiKey: "AIzaSyDWQydohtIvlVZq0sNoXgNEhob8D4TwZBA",
+            authDomain: "alien-terminal.firebaseapp.com",
+            projectId: "alien-terminal",
+            storageBucket: "alien-terminal.firebasestorage.app",
+            messagingSenderId: "484368179427",
+            appId: "1:484368179427:web:f19d379b634d0bcd7025d6",
+            measurementId: "G-XHLNKZC48J",
+        };
+        firebase.initializeApp(firebaseConfig);
+        
+        const database = firebase.database();
+        const storage = firebase.storage();
+        const proposalsRef = database.ref('propostas');
+
+        const form = document.getElementById('proposalForm');
+        const statusEl = document.getElementById('status');
+        const submitButton = form.querySelector('button');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitButton.disabled = true;
+            statusEl.style.color = 'orange';
+            statusEl.textContent = 'Enviando...';
+
+            const nome = document.getElementById('nome').value;
+            const mensagem = document.getElementById('mensagem').value;
+            const cor = document.querySelector('input[name="cor"]:checked').value;
+            const imagemFile = document.getElementById('imagem').files[0];
+            let imagemURL = null;
+
+            try {
+                if (imagemFile) {
+                    statusEl.textContent = 'Carregando imagem...';
+                    const storageRef = storage.ref(`imagens/${Date.now()}_${imagemFile.name}`);
+                    const uploadTask = await storageRef.put(imagemFile);
+                    imagemURL = await uploadTask.ref.getDownloadURL();
+                }
+
+                statusEl.textContent = 'Finalizando...';
+                await proposalsRef.push().set({ nome, mensagem, cor, imagemURL, timestamp: Date.now() });
+
+                statusEl.style.color = 'green';
+                statusEl.textContent = 'Proposta enviada para aprovação!';
+                form.reset();
+
+            } catch (error) {
+                console.error("Erro no envio:", error);
+                statusEl.style.color = 'red';
+                statusEl.textContent = 'Falha ao enviar. Verifique o console para mais detalhes.';
+            } finally {
+                submitButton.disabled = false;
+                setTimeout(() => { statusEl.textContent = ''; }, 4000);
+            }
+        });
+    </script>
+</body>
+</html>

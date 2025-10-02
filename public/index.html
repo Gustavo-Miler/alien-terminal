@@ -1,210 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alertas em Tempo Real</title>
-    <link rel="manifest" href="/manifest.json" />
-    <style>
-      body {
-        font-family: sans-serif;
-        background-color: #f4f4f4;
-        padding: 20px;
-      }
-      h1 {
-        text-align: center;
-        color: #333;
-      }
-      #alertsContainer {
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      .alert-card {
-        background-color: white;
-        color: #d83b01;
-        border-left: 5px solid #d83b01;
-        padding: 15px 20px;
-        margin-bottom: 15px;
-        border-radius: 4px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        animation: fadeIn 0.5s ease;
-      }
-      .alert-card p {
-        margin: 0;
-      }
-      .alert-card small {
-        color: #888;
-      }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Últimos Alertas</h1>
-    <button id="install-button" style="display: none">Instalar App</button>
-    <button id="enable-notifications-button" style="display: none">
-      Habilitar Notificações
-    </button>
-
-    <div id="alertsContainer"></div>
+    <title>Terminal Alienígena</title>
+    <link rel="stylesheet" href="style.css?v=final" />
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <div class="crt-screen">
+        <div class="terminal-content">
+            <div class="glitch static-text" data-text="> INICIANDO PROTOCOLO [HALLOWINK]...">> INICIANDO PROTOCOLO [HALLOWINK]...</div>
+            <p class="static-text">> STATUS: <span class="success">CONECTADO</span></p>
+            <p class="static-text">> AGUARDANDO TRANSMISSÕES...</p>
+            <div id="alertsContainer"></div>
+        </div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"></script>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <script src="main.js?v=final"></script>
 
-    <script>
-      // --- 1. CONFIGURAÇÃO E INICIALIZAÇÃO ---
-      const firebaseConfig = {
-        apiKey: "AIzaSyDWQydohtIvlVZq0sNoXgNEhob8D4TwZBA",
-        authDomain: "alien-terminal.firebaseapp.com",
-        projectId: "alien-terminal",
-        storageBucket: "alien-terminal.firebasestorage.app",
-        messagingSenderId: "484368179427",
-        appId: "1:484368-terminal:web:f19d379b634d0bcd7025d6",
-        measurementId: "G-XHLNKZC48J",
-      };
-      firebase.initializeApp(firebaseConfig);
+    <a href="/proposta.html" target="_blank" id="propose-button">[ ENVIAR PROPOSTA ]</a>
 
-      const messaging = firebase.messaging();
-      const database = firebase.database();
-
-      // --- 2. LÓGICA DO PWA (INSTALAÇÃO E NOTIFICAÇÕES) ---
-      const installButton = document.getElementById("install-button");
-      const notificationsButton = document.getElementById(
-        "enable-notifications-button"
-      );
-      let deferredPrompt;
-
-      const isInStandaloneMode = () =>
-        window.matchMedia("(display-mode: standalone)").matches ||
-        window.navigator.standalone ||
-        document.referrer.includes("android-app://");
-
-      const isDesktop = () =>
-        !/android|iphone|ipad|ipod/i.test(navigator.userAgent);
-
-      window.addEventListener("load", () => {
-        if ("serviceWorker" in navigator) {
-          navigator.serviceWorker
-            .register("/firebase-messaging-sw.js")
-            .then((registration) =>
-              console.log(
-                "Service Worker registrado com sucesso:",
-                registration
-              )
-            )
-            .catch((error) =>
-              console.log("Falha ao registrar o Service Worker:", error)
-            );
-        }
-
-        if (
-          (isInStandaloneMode() || isDesktop()) &&
-          Notification.permission === "default"
-        ) {
-          notificationsButton.style.display = "block";
-        }
-      });
-
-      window.addEventListener("beforeinstallprompt", (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        installButton.style.display = "block";
-      });
-
-      installButton.addEventListener("click", async () => {
-        if (deferredPrompt) {
-          installButton.style.display = "none";
-          deferredPrompt.prompt();
-          await deferredPrompt.userChoice;
-          deferredPrompt = null;
-        }
-      });
-
-      notificationsButton.addEventListener("click", () => {
-        requestNotificationPermission();
-      });
-
-      function requestNotificationPermission() {
-        // ... (código da função não muda)
-        console.log("Requesting permission...");
-        notificationsButton.style.display = "none";
-
-        Notification.requestPermission().then((permission) => {
-          if (permission === "granted") {
-            console.log("Notification permission granted.");
-            messaging
-              .getToken({
-                vapidKey:
-                  "BFKJxZpQkQXxMs_e1tCAjgWuEMiC4xRCNUv620NMpZ8jtCoTkIyeRaxAwooSkOjnh-T-prUWQnF6vZSKSfUeLE8",
-              })
-              .then((currentToken) => {
-                if (currentToken) {
-                  console.log("FCM Token:", currentToken);
-                  database.ref("fcmTokens/" + currentToken).set(true);
-                }
-              })
-              .catch((err) =>
-                console.error("An error occurred while retrieving token. ", err)
-              );
-          } else {
-            console.log("Unable to get permission to notify.");
-          }
-        });
-      }
-
-      // --- 3. LÓGICA DE EXIBIÇÃO DE ALERTAS NA TELA ---
-      const alertsRef = database.ref("alertas");
-      const alertsContainer = document.getElementById("alertsContainer");
-      alertsRef.on("child_added", (snapshot) => {
-        // ... (código para mostrar os alertas não muda)
-        const newAlert = snapshot.val();
-        const alertCard = document.createElement("div");
-        alertCard.className = "alert-card";
-        const messageP = document.createElement("p");
-        messageP.textContent = newAlert.texto;
-        const timeSmall = document.createElement("small");
-        timeSmall.textContent = `Recebido em: ${new Date(
-          newAlert.timestamp
-        ).toLocaleString("pt-BR")}`;
-        alertCard.appendChild(messageP);
-        alertCard.appendChild(timeSmall);
-        alertsContainer.prepend(alertCard);
-      });
-
-      // --- 4. LÓGICA PARA LIMPAR NOTIFICAÇÕES (VERSÃO FINAL) ---
-      function clearAllNotifications() {
-        if (
-          "serviceWorker" in navigator &&
-          navigator.serviceWorker.controller
-        ) {
-          // Envia uma mensagem de comando para o Service Worker ativo
-          navigator.serviceWorker.controller.postMessage({
-            action: "clear_notifications",
-          });
-          console.log(
-            "Comando para limpar notificações enviado para o Service Worker."
-          );
-        }
-      }
-
-      // Ouve quando a visibilidade da página muda
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible") {
-          clearAllNotifications();
-        }
-      });
-
-      // Limpa as notificações assim que o app puder
-      clearAllNotifications();
-    </script>
-  </body>
+</body>
 </html>
