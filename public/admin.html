@@ -53,7 +53,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script>
         function checkAuth() {
-            const secretKey = "farofadototy"; // <-- TROQUE PELA SUA SENHA!
+            const secretKey = "senha_aqui";
             if (prompt("Chave de acesso:") === secretKey) {
                 document.getElementById('adminPanel').style.display = 'block';
                 initializeFirebase();
@@ -69,7 +69,7 @@
                 apiKey: "AIzaSyDWQydohtIvlVZq0sNoXgNEhob8D4TwZBA",
                 authDomain: "alien-terminal.firebaseapp.com",
                 projectId: "alien-terminal",
-                storageBucket: "alien-terminal.firebasestorage.app", // A sua config correta
+                storageBucket: "alien-terminal.firebasestorage.app",
                 messagingSenderId: "484368179427",
                 appId: "1:484368179427:web:f19d379b634d0bcd7025d6",
                 measurementId: "G-XHLNKZC48J",
@@ -80,7 +80,7 @@
             const proposalsRef = database.ref('propostas');
             const alertsRef = database.ref('alertas'); // Referência para os alertas publicados
 
-            // --- Lógica para MODERAR PROPOSTAS (sem alterações) ---
+            // --- Lógica para MODERAR PROPOSTAS ---
             const proposalsList = document.getElementById('proposalsList');
             proposalsRef.on('value', (snapshot) => {
                 proposalsList.innerHTML = !snapshot.exists() ? '<p>Nenhuma proposta pendente.</p>' : '';
@@ -108,7 +108,7 @@
                 }
             });
 
-            // --- NOVA LÓGICA: GERENCIAR ALERTAS PUBLICADOS ---
+            // --- GERENCIAR ALERTAS PUBLICADOS ---
             const alertsList = document.getElementById('alertsList');
             const clearAllAlertsButton = document.getElementById('clearAllAlertsButton');
 
@@ -129,14 +129,12 @@
                 }
             });
 
-            // Adiciona funcionalidade de apagar um alerta individual
             alertsList.addEventListener('click', (e) => {
                 if (e.target.dataset.key) {
                     alertsRef.child(e.target.dataset.key).remove();
                 }
             });
 
-            // Adiciona funcionalidade de apagar todos os alertas
             clearAllAlertsButton.addEventListener('click', () => {
                 if (confirm('Você tem CERTEZA que deseja apagar TODOS os alertas publicados?')) {
                     alertsRef.remove();

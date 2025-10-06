@@ -29,7 +29,7 @@ body {
 
 /* --- IMAGEM NO TERMINAL --- */
 .terminal-image {
-    max-width: 200px;
+    max-width: 400px;
     height: auto;
     display: block;
     margin-top: 10px;

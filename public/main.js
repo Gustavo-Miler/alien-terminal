@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // --- LÓGICA DO CANVAS (sem alterações) ---
+    // --- LÓGICA DO CANVAS ---
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
     function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
